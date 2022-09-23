@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 const (
@@ -28,11 +29,9 @@ func main() {
 	s.Start()
 	defer s.Stop()
 
-	fmt.Println("start cloning: ", time.Now().Format("2006-01-02 15:04:05"))
-
 	config, _ := loadConfigForYaml()
 	moveDir(config.Dest)
-	currentDir()
+	showInfo(config)
 	executeCommand(config.Repos)
 }
 
@@ -57,9 +56,17 @@ func moveDir(path string) {
 	}
 }
 
-func currentDir() {
-	p, _ := os.Getwd()
-	fmt.Println("current dir: ", p)
+func showInfo(config *config) {
+	path, _ := os.Getwd()
+	targetDir := fmt.Sprintf("Target dir: %v", path)
+	reposCount := fmt.Sprintf("Repo count: %v", len(config.Repos))
+
+	line := strings.Repeat("─", utf8.RuneCountInString(path))
+
+	fmt.Println(line)
+	fmt.Println(targetDir)
+	fmt.Println(reposCount)
+	fmt.Println(line)
 }
 
 func expandHomedir(path string) string {
