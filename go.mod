@@ -6,6 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/briandowns/spinner v1.19.0 // indirect
 	github.com/fatih/color v1.7.0 // indirect
+	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mattn/go-isatty v0.0.8 // indirect
