@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"time"
+	"path/filepath"
+	"strings"
 )
 
 const (
@@ -28,8 +30,13 @@ func main() {
 	fmt.Println("start cloning...", time.Now())
 
 	config, _ := loadConfigForYaml()
-
-	dirErr := os.Chdir(config.Dest)
+	var path string
+	if strings.HasPrefix(config.Dest, "~/") {
+		dirname, _ := os.UserHomeDir()
+		path = filepath.Join(dirname, config.Dest[2:])
+	}
+	absPath, _ := filepath.Abs(path)
+	dirErr := os.Chdir(absPath)
 	if dirErr != nil {
 		panic(dirErr)
 	}
