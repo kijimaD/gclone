@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	mainCommand = "git"
-	subCommand  = "clone"
-	configFile  = "config.yml"
-	homeDir     = "~/"
+	mainCommand   = "git"
+	subCommand    = "clone"
+	defaultConfig = "config.yml"
+	homeDir       = "~/"
 )
 
 type config struct {
@@ -47,10 +47,10 @@ func main() {
 }
 
 func loadConfigForYaml() (*config, error) {
-	var configPath = flag.String("f", configFile, "default path")
+	var path = flag.String("f", defaultConfig, "default path")
 	flag.Parse()
 
-	f, err := os.Open(*configPath)
+	f, err := os.Open(*path)
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err
