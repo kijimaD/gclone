@@ -16,6 +16,8 @@ import (
 const (
 	mainCommand = "git"
 	subCommand  = "clone"
+	configFile = "config.yml"
+	homeDir = "~/"
 )
 
 type config struct {
@@ -25,9 +27,11 @@ type config struct {
 
 func main() {
 	// spinner
-	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
-	s.Start()
-	defer s.Stop()
+	{
+		s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+		s.Start()
+		defer s.Stop()
+	}
 
 	config, _ := loadConfigForYaml()
 	moveDir(config.Dest)
@@ -36,7 +40,7 @@ func main() {
 }
 
 func loadConfigForYaml() (*config, error) {
-	f, err := os.Open("config.yml")
+	f, err := os.Open(configFile)
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err
@@ -71,9 +75,9 @@ func showInfo(config *config) {
 
 func expandHomedir(path string) string {
 	var expanded string
-	if strings.HasPrefix(path, "~/") {
+	if strings.HasPrefix(path, homeDir) {
 		dirname, _ := os.UserHomeDir()
-		expanded = filepath.Join(dirname, path[2:])
+		expanded = filepath.Join(dirname, path[len(homeDir):])
 	}
 	return expanded
 }
