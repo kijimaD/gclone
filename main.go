@@ -7,9 +7,9 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"time"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 const (
@@ -18,45 +18,22 @@ const (
 )
 
 type config struct {
-	Dest string `yaml:"dest"`
+	Dest  string   `yaml:"dest"`
 	Repos []string `yaml:"repos"`
 }
 
 func main() {
+	// spinner
 	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
 	s.Start()
 	defer s.Stop()
 
-	fmt.Println("start cloning...", time.Now())
+	fmt.Println("start cloning: ", time.Now().Format("2006-01-02 15:04:05"))
 
 	config, _ := loadConfigForYaml()
-	var path string
-	if strings.HasPrefix(config.Dest, "~/") {
-		dirname, _ := os.UserHomeDir()
-		path = filepath.Join(dirname, config.Dest[2:])
-	}
-	absPath, _ := filepath.Abs(path)
-	dirErr := os.Chdir(absPath)
-	if dirErr != nil {
-		panic(dirErr)
-	}
-	p, _ := os.Getwd()
-	fmt.Println("current dir: ", p)
-
-	for _, repo := range config.Repos {
-		_, err := exec.Command(mainCommand, buildCommand(repo)...).Output()
-		if err != nil {
-			fmt.Println("❌ ", repo)
-			fmt.Println(" ↪", err.Error())
-		} else {
-			fmt.Println("✔ ", repo)
-		}
-	}
-}
-
-func buildCommand(repo string) []string {
-	command := []string {subCommand, repo}
-	return command
+	moveDir(config.Dest)
+	currentDir()
+	executeCommand(config.Repos)
 }
 
 func loadConfigForYaml() (*config, error) {
@@ -72,6 +49,44 @@ func loadConfigForYaml() (*config, error) {
 	return &cfg, err
 }
 
+func moveDir(path string) {
+	absPath, _ := filepath.Abs(expandHomedir(path))
+	dirErr := os.Chdir(absPath)
+	if dirErr != nil {
+		panic(dirErr)
+	}
+}
+
+func currentDir() {
+	p, _ := os.Getwd()
+	fmt.Println("current dir: ", p)
+}
+
+func expandHomedir(path string) string {
+	var expanded string
+	if strings.HasPrefix(path, "~/") {
+		dirname, _ := os.UserHomeDir()
+		expanded = filepath.Join(dirname, path[2:])
+	}
+	return expanded
+}
+
+func executeCommand(repos []string) {
+	for _, repo := range repos {
+		_, err := exec.Command(mainCommand, buildCommand(repo)...).Output()
+		if err != nil {
+			fmt.Println("❌ ", repo)
+			fmt.Println(" ↪", err.Error())
+		} else {
+			fmt.Println("✔ ", repo)
+		}
+	}
+}
+
+func buildCommand(repo string) []string {
+	command := []string{subCommand, repo}
+	return command
+}
+
 // ディレクトリが存在したらスキップ
-// ダウンロード先ディレクトリを設定できるようにする
 // 設定ファイルの雛形を作成できるようにする
