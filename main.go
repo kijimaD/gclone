@@ -27,15 +27,21 @@ func main() {
 	fmt.Println("start cloning...", time.Now())
 
 	config, _ := loadConfigForYaml()
-	fmt.Println(config.Repos)
 
-	_, errExec := exec.Command(mainCommand, subCommand, "git@github.com:kijimaD/my_go.git").Output()
-	if errExec != nil {
-		fmt.Println("failed clone")
-		fmt.Println(errExec.Error())
-	} else {
-		fmt.Println("successed clone")
+	for _, repo := range config.Repos {
+		_, err := exec.Command(mainCommand, buildCommand(repo)...).Output()
+		if err != nil {
+			fmt.Println("❌ ", repo)
+			fmt.Println(" ↪", err.Error())
+		} else {
+			fmt.Println("✔ ", repo)
+		}
 	}
+}
+
+func buildCommand(repo string) []string {
+	command := []string {subCommand, repo}
+	return command
 }
 
 func loadConfigForYaml() (*config, error) {
@@ -50,3 +56,9 @@ func loadConfigForYaml() (*config, error) {
 	err = yaml.NewDecoder(f).Decode(&cfg)
 	return &cfg, err
 }
+
+// sshダウンロードが使えるかチェック
+// https/sshを選べるようにする
+// ディレクトリが存在したらスキップ
+// ダウンロード先ディレクトリを設定できるようにする
+// 設定ファイルの雛形を作成できるようにする
