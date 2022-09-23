@@ -16,7 +16,7 @@ const (
 )
 
 type config struct {
-	Repos []string `yaml:"ident"`
+	Repos []string `yaml:"repos"`
 }
 
 func main() {
@@ -45,7 +45,7 @@ func buildCommand(repo string) []string {
 }
 
 func loadConfigForYaml() (*config, error) {
-	f, err := os.Open("config.yaml")
+	f, err := os.Open("config.yml")
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err
@@ -57,8 +57,6 @@ func loadConfigForYaml() (*config, error) {
 	return &cfg, err
 }
 
-// sshダウンロードが使えるかチェック
-// https/sshを選べるようにする
 // ディレクトリが存在したらスキップ
 // ダウンロード先ディレクトリを設定できるようにする
 // 設定ファイルの雛形を作成できるようにする
