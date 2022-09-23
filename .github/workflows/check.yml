@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: mkdir Project/test0 Project/test1
+      - run: mkdir -p Project/test0 Project/test1
       - name: run
         run: go run .
       - name: check existing
