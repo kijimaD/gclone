@@ -16,11 +16,15 @@ import (
 const (
 	mainCommand = "git"
 	subCommand  = "clone"
-	configFile = "config.yml"
-	homeDir = "~/"
+	configFile  = "config.yml"
+	homeDir     = "~/"
 )
 
 type config struct {
+	Jobs []clone `yaml:"jobs"`
+}
+
+type clone struct {
 	Dest  string   `yaml:"dest"`
 	Repos []string `yaml:"repos"`
 }
@@ -34,9 +38,11 @@ func main() {
 	}
 
 	config, _ := loadConfigForYaml()
-	moveDir(config.Dest)
-	showInfo(config)
-	executeCommand(config.Repos)
+	for _, c := range config.Jobs {
+		moveDir(c.Dest)
+		showInfo(c)
+		executeCommand(c.Repos)
+	}
 }
 
 func loadConfigForYaml() (*config, error) {
@@ -60,7 +66,7 @@ func moveDir(path string) {
 	}
 }
 
-func showInfo(config *config) {
+func showInfo(config clone) {
 	path, _ := os.Getwd()
 	targetDir := fmt.Sprintf("Target dir: %v", path)
 	reposCount := fmt.Sprintf("Repo count: %v", len(config.Repos))
