@@ -1,9 +1,9 @@
 jobs:
+  - dest: '~/Project/test0'
+    repos:
+      - git@github.com:kijimaD/my_go.git
+      - git@github.com:kijimaD/gin_hello.git
   - dest: '~/Project/test1'
     repos:
-      - git@github.com:kijimaD/my_go.git
-      - git@github.com:kijimaD/gin_hello.git
-  - dest: '~/Project/test2'
-    repos:
-      - git@github.com:kijimaD/my_go.git
-      - git@github.com:kijimaD/gin_hello.git
+      - git@github.com:fatih/color.git
+      - git@github.com:joho/godotenv.git
