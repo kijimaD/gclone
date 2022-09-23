@@ -1,4 +1,4 @@
-module gclone
+module github.com/kijimaD/gclone
 
 go 1.19
 
