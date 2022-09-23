@@ -2,7 +2,7 @@
 
 # gclone
 
-gclone is literate git clone cli tool.
+gclone is literate `git clone` cli tool.
 
 <img src="https://user-images.githubusercontent.com/11595790/192002784-3a72243d-2343-42d2-a8e5-581977faa382.jpg" width="40%" align=right>
 
@@ -28,9 +28,9 @@ jobs:
       - git@github.com:joho/godotenv.git
 ```
 
-and run!
+and run!(on directory config.yml existing)
 ```shell
-$ gclone
+$ gclone install
 ```
 
 # Options

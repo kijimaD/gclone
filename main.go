@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	mainCommand   = "git"
-	subCommand    = "clone"
-	defaultConfig = "config.yml"
-	homeDir       = "~/"
+	mainGitCommand = "git"
+	subGitCommand  = "clone"
+	defaultConfig  = "config.yml"
+	homeDir        = "~/"
 )
 
 type config struct {
@@ -31,18 +31,20 @@ type clone struct {
 }
 
 func main() {
-	// spinner
-	{
-		s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
-		s.Start()
-		defer s.Stop()
-	}
-
 	config, _ := loadConfigForYaml()
-	for _, c := range config.Jobs {
-		moveDir(c.Dest)
-		showInfo(c)
-		executeCommand(c.Repos)
+
+	flag.Parse()
+	subCommand := flag.Arg(0)
+
+	switch subCommand {
+	case "install":
+		for _, c := range config.Jobs {
+			moveDir(c.Dest)
+			showInfo(c)
+			executeCommand(c.Repos)
+		}
+	default:
+		fmt.Println("Need subcommand!")
 	}
 }
 
@@ -93,8 +95,12 @@ func expandHomedir(path string) string {
 }
 
 func executeCommand(repos []string) {
+	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+	s.Start()
+	defer s.Stop()
+
 	for _, repo := range repos {
-		_, err := exec.Command(mainCommand, buildCommand(repo)...).Output()
+		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
 		if err != nil {
 			fmt.Println("❌ ", repo)
 			fmt.Println(" ↪", err.Error())
@@ -105,9 +111,6 @@ func executeCommand(repos []string) {
 }
 
 func buildCommand(repo string) []string {
-	command := []string{subCommand, repo}
+	command := []string{subGitCommand, repo}
 	return command
 }
-
-// ディレクトリが存在したらスキップ
-// 設定ファイルの雛形を作成できるようにする
