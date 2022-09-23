@@ -1,4 +1,10 @@
-Literate git clone cli tool.
+[![⚗️Check](https://github.com/kijimaD/gclone/actions/workflows/check.yml/badge.svg)](https://github.com/kijimaD/gclone/actions/workflows/check.yml)
+
+# gclone
+
+gclone is literate git clone cli tool.
+
+<img src="https://user-images.githubusercontent.com/11595790/192002784-3a72243d-2343-42d2-a8e5-581977faa382.jpg" width="40%" align=right>
 
 # Install
 
