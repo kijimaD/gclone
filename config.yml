@@ -1,4 +1,4 @@
-dest: '~/Project/test'
+dest: '/home/green/Project/test'
 repos:
   - git@github.com:kijimaD/my_go.git
   - git@github.com:kijimaD/gin_hello.git

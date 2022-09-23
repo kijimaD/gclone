@@ -16,6 +16,7 @@ const (
 )
 
 type config struct {
+	Dest string `yaml:"dest"`
 	Repos []string `yaml:"repos"`
 }
 
@@ -27,6 +28,13 @@ func main() {
 	fmt.Println("start cloning...", time.Now())
 
 	config, _ := loadConfigForYaml()
+
+	dirErr := os.Chdir(config.Dest)
+	if dirErr != nil {
+		panic(dirErr)
+	}
+	p, _ := os.Getwd()
+	fmt.Println("current dir: ", p)
 
 	for _, repo := range config.Repos {
 		_, err := exec.Command(mainCommand, buildCommand(repo)...).Output()
