@@ -1,0 +1,11 @@
+# CIではSSH cloneができないため、HTTPSを使う
+
+jobs:
+  - dest: '~/Project/test0'
+    repos:
+      - https://github.com:kijimaD/my_go.git
+      - https://github.com:kijimaD/gin_hello.git
+  - dest: '~/Project/test1'
+    repos:
+      - https://github.com:fatih/color.git
+      - https://github.com:joho/godotenv.git

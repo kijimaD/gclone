@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/briandowns/spinner"
 	"github.com/go-yaml/yaml"
@@ -46,7 +47,10 @@ func main() {
 }
 
 func loadConfigForYaml() (*config, error) {
-	f, err := os.Open(configFile)
+	var configPath = flag.String("f", configFile, "default path")
+	flag.Parse()
+
+	f, err := os.Open(*configPath)
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err

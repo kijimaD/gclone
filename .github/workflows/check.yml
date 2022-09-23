@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: mkdir -p ~/Project/test0 ~/Project/test1
       - name: run
-        run: go run .
+        run: go run . -f test/config.yml
       - name: check existing
         run: |
           cd ~/Project/test0/my_go/.git &&
