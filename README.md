@@ -37,5 +37,5 @@ $ gclone install
 
 -f: config file path
 ```shell
-$ gclone -f dir/config.yml
+$ gclone -f dir/config.yml install
 ```

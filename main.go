@@ -49,10 +49,10 @@ func main() {
 }
 
 func loadConfigForYaml() (*config, error) {
-	var path = flag.String("f", defaultConfig, "default path")
+	var configPath = flag.String("f", defaultConfig, "default path")
 	flag.Parse()
 
-	f, err := os.Open(*path)
+	f, err := os.Open(expandHomedir(*configPath))
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err
@@ -85,11 +85,11 @@ func showInfo(config clone) {
 	fmt.Println(line)
 }
 
-func expandHomedir(path string) string {
-	var expanded string
-	if strings.HasPrefix(path, homeDir) {
+func expandHomedir(original string) string {
+	expanded := original
+	if strings.HasPrefix(original, homeDir) {
 		dirname, _ := os.UserHomeDir()
-		expanded = filepath.Join(dirname, path[len(homeDir):])
+		expanded = filepath.Join(dirname, original[len(homeDir):])
 	}
 	return expanded
 }
