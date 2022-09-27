@@ -61,11 +61,12 @@ func (c commandBuilder) executeCommand() {
 		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
 		if err != nil {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
-			c.output.result.lines = append(c.output.result.lines, line)
+			c.output.progress.lines = append(c.output.progress.lines, line)
 		} else {
-			c.output.result.lines = append(c.output.result.lines, fmt.Sprintf("✔ %s", repo))
+			c.output.progress.lines = append(c.output.progress.lines, fmt.Sprintf("✔ %s", repo))
 		}
 	}
+	c.output.writeProgress()
 }
 
 func buildCommand(repo string) []string {
