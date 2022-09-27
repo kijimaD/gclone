@@ -1,9 +1,6 @@
 package main
 
-import (
-	"flag"
-	"fmt"
-)
+import ()
 
 const (
 	mainGitCommand    = "git"
@@ -21,47 +18,15 @@ type group struct {
 	Repos []string `yaml:"repos"`
 }
 
-type outputBuilder struct {
-	config *config
-	result *result
-}
-
-type result struct {
-	lines []string
-}
-
-func newOutputBuilder(config *config, result *result) *outputBuilder {
-	return &outputBuilder{
-		config,
-		result,
-	}
-}
-
-func (o *outputBuilder) writeResult() {
-	for _, line := range o.result.lines {
-		fmt.Println(string(line))
-	}
-}
-
 func main() {
 	config, _ := LoadConfigForYaml()
-	flag.Parse()
-	subCommand := flag.Arg(0)
-
 	var result result
-
 	output := newOutputBuilder(config, &result)
 
-	switch subCommand {
-	case "install":
-		for _, group := range config.Groups {
-			command := newCommandBuilder(config, output, group)
-			command.execute()
-		}
-	default:
-		fmt.Println("Need subcommand!")
+	for _, group := range config.Groups {
+		command := newCommandBuilder(config, output, group)
+		command.execute()
 	}
-
 	output.writeResult()
 }
 

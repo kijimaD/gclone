@@ -30,12 +30,12 @@ groups:
 
 and run!(on directory config.yml existing)
 ```shell
-$ gclone install
+$ gclone
 ```
 
 # Options
 
 -f: config file path
 ```shell
-$ gclone -f dir/config.yml install
+$ gclone -f dir/config.yml
 ```
