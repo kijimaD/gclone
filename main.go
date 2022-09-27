@@ -80,9 +80,7 @@ func main() {
 	case "install":
 		for _, group := range config.Jobs {
 			command := newCommandBuilder(config, output, group)
-			command.moveDir()
-			command.showInfo()
-			command.executeCommand()
+			command.execute()
 		}
 	default:
 		fmt.Println("Need subcommand!")
@@ -110,6 +108,12 @@ func loadConfigForYaml() (*config, error) {
 	var cfg config
 	err = yaml.NewDecoder(f).Decode(&cfg)
 	return &cfg, err
+}
+
+func (c commandBuilder) execute() {
+	c.moveDir()
+	c.showInfo()
+	c.executeCommand()
 }
 
 func (c commandBuilder) moveDir() {
