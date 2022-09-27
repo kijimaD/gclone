@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/briandowns/spinner"
-	"github.com/go-yaml/yaml"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -67,7 +65,7 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 }
 
 func main() {
-	config, _ := loadConfigForYaml()
+	config, _ := LoadConfigForYaml()
 
 	flag.Parse()
 	subCommand := flag.Arg(0)
@@ -93,22 +91,6 @@ func main() {
 // オプションと結果を保持する構造体・メソッドを作っていく
 
 // コマンドオプションと、ymlから読み取る設定をマージする
-
-func loadConfigForYaml() (*config, error) {
-	var configPath = flag.String("f", defaultConfigPath, "default config path")
-	flag.Parse()
-
-	f, err := os.Open(ExpandHomedir(*configPath))
-	if err != nil {
-		log.Fatal("loadConfigForYaml os.Open err:", err)
-		return nil, err
-	}
-	defer f.Close()
-
-	var cfg config
-	err = yaml.NewDecoder(f).Decode(&cfg)
-	return &cfg, err
-}
 
 func (c commandBuilder) execute() {
 	c.moveDir()
