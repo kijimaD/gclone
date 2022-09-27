@@ -1,6 +1,6 @@
 # CIではSSH cloneができないため、HTTPSを使う
 
-jobs:
+groups:
   - dest: '~/Project/test0'
     repos:
       - https://github.com/kijimaD/my_go.git

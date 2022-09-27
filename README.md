@@ -17,7 +17,7 @@ $ go install github.com/kijimaD/gclone@main
 make `config.yml`
 (↓example)
 ```yaml
-jobs:
+groups:
   - dest: '~/Project/test0' # specify exist directory
     repos:
       - git@github.com:kijimaD/my_go.git
@@ -30,12 +30,12 @@ jobs:
 
 and run!(on directory config.yml existing)
 ```shell
-$ gclone install
+$ gclone
 ```
 
 # Options
 
 -f: config file path
 ```shell
-$ gclone -f dir/config.yml install
+$ gclone -f dir/config.yml
 ```

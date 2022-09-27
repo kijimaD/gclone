@@ -1,4 +1,4 @@
-jobs:
+groups:
   - dest: '~/Project/test0'
     repos:
       - git@github.com:kijimaD/my_go.git
