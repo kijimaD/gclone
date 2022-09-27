@@ -30,23 +30,56 @@ type group struct {
 	Repos []string `yaml:"repos"`
 }
 
+type result struct {
+	lines []string
+}
+
+type outputBuilder struct {
+	config *config
+	result *result
+}
+
+func newOutputBuilder(config *config, result *result) *outputBuilder {
+	return &outputBuilder {
+		config,
+		result,
+	}
+}
+
+func (o *outputBuilder) writeResult() {
+	for _, line := range o.result.lines {
+		fmt.Println(string(line))
+	}
+}
+
 func main() {
 	config, _ := loadConfigForYaml()
 
 	flag.Parse()
 	subCommand := flag.Arg(0)
 
+	var result result
+	result.lines = make([]string, 2)
+
 	switch subCommand {
 	case "install":
 		for _, c := range config.Jobs {
 			moveDir(c.Dest)
-			showInfo(c)
-			executeCommand(c.Repos)
+			showInfo(c, &result)
+			executeCommand(c.Repos, &result)
 		}
 	default:
 		fmt.Println("Need subcommand!")
 	}
+
+	builder := newOutputBuilder(config, &result)
+	builder.writeResult()
 }
+
+// 結果の構造体を作って、そこに結果を入れたい。そしてまとめた箇所で出力したい。今は出力がバラバラ
+// オプションと結果を保持する構造体・メソッドを作っていく
+
+// コマンドオプションと、ymlから読み取る設定をマージする
 
 func loadConfigForYaml() (*config, error) {
 	var configPath = flag.String("f", defaultConfigPath, "default config path")
@@ -72,7 +105,7 @@ func moveDir(path string) {
 	}
 }
 
-func showInfo(group group) {
+func showInfo(group group, result *result) {
 	path, _ := os.Getwd()
 	targetDir := fmt.Sprintf("Target dir: %v", path)
 	reposCount := fmt.Sprintf("Repo count: %v", len(group.Repos))
@@ -94,7 +127,7 @@ func expandHomedir(original string) string {
 	return expanded
 }
 
-func executeCommand(repos []string) {
+func executeCommand(repos []string, result *result) {
 	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
 	s.Start()
 	defer s.Stop()
@@ -102,10 +135,10 @@ func executeCommand(repos []string) {
 	for _, repo := range repos {
 		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
 		if err != nil {
-			fmt.Println("❌ ", repo)
-			fmt.Println(" ↪", err.Error())
+			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
+			result.lines = append(result.lines, line)
 		} else {
-			fmt.Println("✔ ", repo)
+			result.lines = append(result.lines, fmt.Sprintf("✔ ", repo))
 		}
 	}
 }
