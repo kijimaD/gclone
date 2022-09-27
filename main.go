@@ -22,10 +22,10 @@ const (
 )
 
 type config struct {
-	Jobs []clone `yaml:"jobs"`
+	Jobs []group `yaml:"jobs"`
 }
 
-type clone struct {
+type group struct {
 	Dest  string   `yaml:"dest"`
 	Repos []string `yaml:"repos"`
 }
@@ -72,10 +72,10 @@ func moveDir(path string) {
 	}
 }
 
-func showInfo(config clone) {
+func showInfo(group group) {
 	path, _ := os.Getwd()
 	targetDir := fmt.Sprintf("Target dir: %v", path)
-	reposCount := fmt.Sprintf("Repo count: %v", len(config.Repos))
+	reposCount := fmt.Sprintf("Repo count: %v", len(group.Repos))
 
 	line := strings.Repeat("─", utf8.RuneCountInString(path))
 
