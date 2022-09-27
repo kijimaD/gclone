@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	mainGitCommand = "git"
-	subGitCommand  = "clone"
-	defaultConfigPath  = "config.yml"
-	homeDir        = "~/"
+	mainGitCommand    = "git"
+	subGitCommand     = "clone"
+	defaultConfigPath = "config.yml"
+	homeDir           = "~/"
 )
 
 type config struct {
@@ -55,10 +55,10 @@ func (o *outputBuilder) writeResult() {
 type commandBuilder struct {
 	config *config
 	output *outputBuilder
-	group group
+	group  group
 }
 
-func newCommandBuilder(config *config, output *outputBuilder, group group ) *commandBuilder {
+func newCommandBuilder(config *config, output *outputBuilder, group group) *commandBuilder {
 	return &commandBuilder{
 		config,
 		output,

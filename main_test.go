@@ -1,8 +1,8 @@
 package main
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestMoveDir(t *testing.T) {
@@ -55,7 +55,7 @@ func TestBuildCommand(t *testing.T) {
 	repo := "git@github.com:kijimaD/gclone.git"
 
 	result := buildCommand(repo)
-	expect := []string { subGitCommand, repo }
+	expect := []string{subGitCommand, repo}
 
 	if !(result[0] == expect[0]) || !(result[1] == expect[1]) {
 		t.Error("result: ", result, "expect:", expect)
