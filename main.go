@@ -20,7 +20,7 @@ const (
 )
 
 type config struct {
-	Jobs []group `yaml:"jobs"`
+	Groups []group `yaml:"groups"`
 }
 
 type group struct {
@@ -76,7 +76,7 @@ func main() {
 
 	switch subCommand {
 	case "install":
-		for _, group := range config.Jobs {
+		for _, group := range config.Groups {
 			command := newCommandBuilder(config, output, group)
 			command.execute()
 		}
