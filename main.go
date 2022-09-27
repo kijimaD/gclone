@@ -40,7 +40,7 @@ type outputBuilder struct {
 }
 
 func newOutputBuilder(config *config, result *result) *outputBuilder {
-	return &outputBuilder {
+	return &outputBuilder{
 		config,
 		result,
 	}
@@ -52,6 +52,20 @@ func (o *outputBuilder) writeResult() {
 	}
 }
 
+type commandBuilder struct {
+	config *config
+	output *outputBuilder
+	group group
+}
+
+func newCommandBuilder(config *config, output *outputBuilder, group group ) *commandBuilder {
+	return &commandBuilder{
+		config,
+		output,
+		group,
+	}
+}
+
 func main() {
 	config, _ := loadConfigForYaml()
 
@@ -59,21 +73,22 @@ func main() {
 	subCommand := flag.Arg(0)
 
 	var result result
-	result.lines = make([]string, 2)
+
+	output := newOutputBuilder(config, &result)
 
 	switch subCommand {
 	case "install":
-		for _, c := range config.Jobs {
-			moveDir(c.Dest)
-			showInfo(c, &result)
-			executeCommand(c.Repos, &result)
+		for _, group := range config.Jobs {
+			command := newCommandBuilder(config, output, group)
+			command.moveDir()
+			command.showInfo()
+			command.executeCommand()
 		}
 	default:
 		fmt.Println("Need subcommand!")
 	}
 
-	builder := newOutputBuilder(config, &result)
-	builder.writeResult()
+	output.writeResult()
 }
 
 // 結果の構造体を作って、そこに結果を入れたい。そしてまとめた箇所で出力したい。今は出力がバラバラ
@@ -97,18 +112,18 @@ func loadConfigForYaml() (*config, error) {
 	return &cfg, err
 }
 
-func moveDir(path string) {
-	absPath, _ := filepath.Abs(expandHomedir(path))
+func (c commandBuilder) moveDir() {
+	absPath, _ := filepath.Abs(expandHomedir(c.group.Dest))
 	dirErr := os.Chdir(absPath)
 	if dirErr != nil {
 		panic(dirErr)
 	}
 }
 
-func showInfo(group group, result *result) {
+func (c commandBuilder) showInfo() {
 	path, _ := os.Getwd()
 	targetDir := fmt.Sprintf("Target dir: %v", path)
-	reposCount := fmt.Sprintf("Repo count: %v", len(group.Repos))
+	reposCount := fmt.Sprintf("Repo count: %v", len(c.group.Repos))
 
 	line := strings.Repeat("─", utf8.RuneCountInString(path))
 
@@ -127,18 +142,18 @@ func expandHomedir(original string) string {
 	return expanded
 }
 
-func executeCommand(repos []string, result *result) {
+func (c commandBuilder) executeCommand() {
 	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
 	s.Start()
 	defer s.Stop()
 
-	for _, repo := range repos {
+	for _, repo := range c.group.Repos {
 		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
 		if err != nil {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
-			result.lines = append(result.lines, line)
+			c.output.result.lines = append(c.output.result.lines, line)
 		} else {
-			result.lines = append(result.lines, fmt.Sprintf("✔ ", repo))
+			c.output.result.lines = append(c.output.result.lines, fmt.Sprintf("✔ ", repo))
 		}
 	}
 }
