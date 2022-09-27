@@ -5,29 +5,29 @@ import (
 	"testing"
 )
 
-func TestMoveDir(t *testing.T) {
-	{
-		moveDir("~/")
+// func TestMoveDir(t *testing.T) {
+// 	{
+// 		moveDir("~/")
 
-		home, _ := os.UserHomeDir()
-		pwd, _ := os.Getwd()
+// 		home, _ := os.UserHomeDir()
+// 		pwd, _ := os.Getwd()
 
-		if !(pwd == home) {
-			t.Error(pwd, home)
-		}
-	}
+// 		if !(pwd == home) {
+// 			t.Error(pwd, home)
+// 		}
+// 	}
 
-	{
-		moveDir("/")
+// 	{
+// 		moveDir("/")
 
-		root := "/"
-		pwd, _ := os.Getwd()
+// 		root := "/"
+// 		pwd, _ := os.Getwd()
 
-		if !(pwd == root) {
-			t.Error(pwd, root)
-		}
-	}
-}
+// 		if !(pwd == root) {
+// 			t.Error(pwd, root)
+// 		}
+// 	}
+// }
 
 func TestExpandHomeDir(t *testing.T) {
 	// expand ~

@@ -153,7 +153,7 @@ func (c commandBuilder) executeCommand() {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
 			c.output.result.lines = append(c.output.result.lines, line)
 		} else {
-			c.output.result.lines = append(c.output.result.lines, fmt.Sprintf("✔ ", repo))
+			c.output.result.lines = append(c.output.result.lines, fmt.Sprintf("✔ %s", repo))
 		}
 	}
 }
