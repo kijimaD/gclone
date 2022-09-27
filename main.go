@@ -20,8 +20,8 @@ type group struct {
 
 func main() {
 	config, _ := LoadConfigForYaml()
-	var result result
-	var progress progress
+	var result record
+	var progress record
 	output := newOutputBuilder(config, &result, &progress)
 
 	for _, group := range config.Groups {

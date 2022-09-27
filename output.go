@@ -6,19 +6,15 @@ import (
 
 type outputBuilder struct {
 	config   *config
-	result   *result
-	progress *progress
+	result   *record
+	progress *record
 }
 
-type progress struct {
+type record struct {
 	lines []string
 }
 
-type result struct {
-	lines []string
-}
-
-func newOutputBuilder(config *config, result *result, progress *progress) *outputBuilder {
+func newOutputBuilder(config *config, result *record, progress *record) *outputBuilder {
 	return &outputBuilder{
 		config,
 		result,
