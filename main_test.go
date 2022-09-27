@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"testing"
 )
 
@@ -28,28 +27,6 @@ import (
 // 		}
 // 	}
 // }
-
-func TestExpandHomeDir(t *testing.T) {
-	// expand ~
-	{
-		home, _ := os.UserHomeDir()
-
-		result := expandHomedir("~/")
-		expect := home
-		if !(result == expect) {
-			t.Error("result: ", result, "expect:", expect)
-		}
-	}
-
-	// not expand
-	{
-		result := expandHomedir("/home/user")
-		expect := "/home/user"
-		if !(result == expect) {
-			t.Error("result: ", result, "expect:", expect)
-		}
-	}
-}
 
 func TestBuildCommand(t *testing.T) {
 	repo := "git@github.com:kijimaD/gclone.git"

@@ -98,7 +98,7 @@ func loadConfigForYaml() (*config, error) {
 	var configPath = flag.String("f", defaultConfigPath, "default config path")
 	flag.Parse()
 
-	f, err := os.Open(expandHomedir(*configPath))
+	f, err := os.Open(ExpandHomedir(*configPath))
 	if err != nil {
 		log.Fatal("loadConfigForYaml os.Open err:", err)
 		return nil, err
@@ -117,7 +117,7 @@ func (c commandBuilder) execute() {
 }
 
 func (c commandBuilder) moveDir() {
-	absPath, _ := filepath.Abs(expandHomedir(c.group.Dest))
+	absPath, _ := filepath.Abs(ExpandHomedir(c.group.Dest))
 	dirErr := os.Chdir(absPath)
 	if dirErr != nil {
 		panic(dirErr)
@@ -135,15 +135,6 @@ func (c commandBuilder) showInfo() {
 	fmt.Println(targetDir)
 	fmt.Println(reposCount)
 	fmt.Println(line)
-}
-
-func expandHomedir(original string) string {
-	expanded := original
-	if strings.HasPrefix(original, homeDir) {
-		dirname, _ := os.UserHomeDir()
-		expanded = filepath.Join(dirname, original[len(homeDir):])
-	}
-	return expanded
 }
 
 func (c commandBuilder) executeCommand() {
