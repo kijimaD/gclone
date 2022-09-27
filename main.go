@@ -17,7 +17,7 @@ import (
 const (
 	mainGitCommand = "git"
 	subGitCommand  = "clone"
-	defaultConfig  = "config.yml"
+	defaultConfigPath  = "config.yml"
 	homeDir        = "~/"
 )
 
@@ -49,7 +49,7 @@ func main() {
 }
 
 func loadConfigForYaml() (*config, error) {
-	var configPath = flag.String("f", defaultConfig, "default path")
+	var configPath = flag.String("f", defaultConfigPath, "default config path")
 	flag.Parse()
 
 	f, err := os.Open(expandHomedir(*configPath))
