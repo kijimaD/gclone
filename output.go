@@ -37,7 +37,7 @@ func (o *outputBuilder) writeProgress() {
 }
 
 func (o *outputBuilder) writeResult() {
-	fmt.Printf("\ndone\n")
+	fmt.Printf("\ndone!\n")
 	fmt.Println("Success:", o.success)
 	fmt.Println("Fail:", o.fail)
 	fmt.Printf("Process: %vms\n", time.Since(o.now).Milliseconds())

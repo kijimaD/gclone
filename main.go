@@ -4,13 +4,6 @@ import (
 	"time"
 )
 
-const (
-	mainGitCommand    = "git"
-	subGitCommand     = "clone"
-	defaultConfigPath = "config.yml"
-	homeDir           = "~/"
-)
-
 type config struct {
 	Groups []group `yaml:"groups"`
 }
@@ -29,7 +22,7 @@ func main() {
 
 	for _, group := range config.Groups {
 		command := newCommandBuilder(config, output, group)
-		command.execute()
+		command.executeGroup()
 	}
 	output.writeResult()
 }
