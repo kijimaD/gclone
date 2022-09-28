@@ -27,7 +27,7 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 
 func (c commandBuilder) execute() {
 	c.moveDir()
-	c.showInfo()
+	c.groupInfo()
 	c.executeCommand()
 }
 
@@ -39,17 +39,17 @@ func (c commandBuilder) moveDir() {
 	}
 }
 
-func (c commandBuilder) showInfo() {
-	path, _ := os.Getwd()
-	targetDir := fmt.Sprintf("Target dir: %v", path)
+func (c commandBuilder) groupInfo() {
+	currentPath, _ := os.Getwd()
+	targetDir := fmt.Sprintf("Target dir: %v", currentPath)
 	reposCount := fmt.Sprintf("Repo count: %v", len(c.group.Repos))
+	line := strings.Repeat("─", utf8.RuneCountInString(targetDir))
 
-	line := strings.Repeat("─", utf8.RuneCountInString(path))
-
-	fmt.Println(line)
-	fmt.Println(targetDir)
-	fmt.Println(reposCount)
-	fmt.Println(line)
+	c.output.appendProgress(line)
+	c.output.appendProgress(targetDir)
+	c.output.appendProgress(reposCount)
+	c.output.appendProgress(line)
+	c.output.writeProgress()
 }
 
 func (c commandBuilder) executeCommand() {
