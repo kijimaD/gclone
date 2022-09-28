@@ -34,6 +34,7 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 }
 
 func (c commandBuilder) executeGroup() {
+	c.prepareDir()
 	c.moveDir()
 	c.groupInfo()
 
@@ -43,10 +44,20 @@ func (c commandBuilder) executeGroup() {
 	c.output.appendProgress("") // newline
 }
 
+func (c commandBuilder) prepareDir() {
+	// If not exist target directory, make directory
+	if _, err := os.Stat(ExpandHomedir(c.group.Dest)); os.IsNotExist(err) {
+		os.Mkdir(ExpandHomedir(c.group.Dest), os.ModePerm)
+	}
+}
+
 func (c commandBuilder) moveDir() {
 	absPath, _ := filepath.Abs(ExpandHomedir(c.group.Dest))
 	dirErr := os.Chdir(absPath)
 	if dirErr != nil {
+		currentPath, _ := os.Getwd()
+		fmt.Println("current:", currentPath)
+		fmt.Println("want:", absPath)
 		panic(dirErr)
 	}
 }
