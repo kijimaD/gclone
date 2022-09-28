@@ -1,6 +1,8 @@
 package main
 
-import ()
+import (
+	"time"
+)
 
 const (
 	mainGitCommand    = "git"
@@ -19,10 +21,11 @@ type group struct {
 }
 
 func main() {
+	now := time.Now()
 	config, _ := LoadConfigForYaml()
 	var result record
 	var progress record
-	output := newOutputBuilder(config, &result, &progress)
+	output := newOutputBuilder(config, &result, &progress, now)
 
 	for _, group := range config.Groups {
 		command := newCommandBuilder(config, output, group)
