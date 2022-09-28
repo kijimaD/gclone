@@ -25,5 +25,5 @@ RUN apt-get update \
     git
 
 COPY --from=builder /build/bin/gclone /bin/
-WORKDIR /root/Project
+WORKDIR /workdir
 ENTRYPOINT ["/bin/gclone"]

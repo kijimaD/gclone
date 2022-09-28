@@ -31,20 +31,34 @@ jobs:
       - name: build
         run: go build .
 
-  run:
+  run_exist_dir:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: mkdir -p ~/Project/test0 ~/Project/test1
+      - run: mkdir -p ~/Project1 ~/Project2
       - name: run
         run: go run . -f test/config.yml
       - name: check existing
         run: |
-          cd ~/Project/test0/my_go/.git &&
-          cd ~/Project/test0/gin_hello/.git &&
-          cd ~/Project/test1/color/.git &&
-          cd ~/Project/test1/godotenv/.git
+          cd ~/Project1/my_go/.git &&
+          cd ~/Project1/gin_hello/.git &&
+          cd ~/Project2/color/.git &&
+          cd ~/Project2/godotenv/.git
+
+  run_not_exist_dir:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: run
+        run: go run . -f test/config.yml
+      - name: check existing
+        run: |
+          cd ~/Project1/my_go/.git &&
+          cd ~/Project1/gin_hello/.git &&
+          cd ~/Project2/color/.git &&
+          cd ~/Project2/godotenv/.git
 
   test:
     needs: setup

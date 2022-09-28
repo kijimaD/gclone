@@ -64,7 +64,7 @@ func (c commandBuilder) moveDir() {
 
 func (c commandBuilder) groupInfo() {
 	currentPath, _ := os.Getwd()
-	targetDir := fmt.Sprintf("Target dir: %v", currentPath)
+	targetDir := fmt.Sprintf("Save dir: %v", currentPath)
 	reposCount := fmt.Sprintf("Repo count: %v", len(c.group.Repos))
 	line := strings.Repeat(lineChar, utf8.RuneCountInString(targetDir))
 

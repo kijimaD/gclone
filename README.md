@@ -39,3 +39,10 @@ $ gclone
 ```shell
 $ gclone -f dir/config.yml
 ```
+
+# Docker
+
+This command is for testing. Not save result your disk.
+```shell
+docker run --rm -t -v "${PWD}":/workdir -v "${HOME}/.ssh":/root/.ssh docker.io/library/test
+```
