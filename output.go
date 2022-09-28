@@ -34,3 +34,11 @@ func (o *outputBuilder) writeResult() {
 		fmt.Println(string(line))
 	}
 }
+
+func (o *outputBuilder) appendProgress(line string) {
+	o.progress.lines = append(o.progress.lines, line)
+}
+
+func (o *outputBuilder) appendResult(line string) {
+	o.result.lines = append(o.result.lines, line)
+}

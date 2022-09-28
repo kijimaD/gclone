@@ -58,18 +58,14 @@ func (c commandBuilder) executeCommand() {
 	defer s.Stop()
 
 	for _, repo := range c.group.Repos {
-		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
+		_, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).Output()
 		if err != nil {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
-			c.output.progress.lines = append(c.output.progress.lines, line)
+			c.output.appendProgress(line)
 		} else {
-			c.output.progress.lines = append(c.output.progress.lines, fmt.Sprintf("✔ %s", repo))
+			line := fmt.Sprintf("✔ %s", repo)
+			c.output.appendProgress(line)
 		}
+		c.output.writeProgress()
 	}
-	c.output.writeProgress()
-}
-
-func buildCommand(repo string) []string {
-	command := []string{subGitCommand, repo}
-	return command
 }
