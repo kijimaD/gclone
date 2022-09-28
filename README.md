@@ -42,7 +42,11 @@ $ gclone -f dir/config.yml
 
 # Docker
 
-This command is for testing. Not save result your disk.
+This command is for testing, not save result your disk. If you want to save disk, mount save directory.
 ```shell
-docker run --rm -t -v "${PWD}":/workdir -v "${HOME}/.ssh":/root/.ssh docker.io/library/test
+docker run --rm
+           -it
+           -v "${PWD}":/workdir \
+           -v "${HOME}/.ssh":/root/.ssh \
+           ghcr.io/kijimad/gclone:latest
 ```
