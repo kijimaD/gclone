@@ -70,4 +70,5 @@ func (c commandBuilder) executeCommand() {
 		}
 		c.output.writeProgress()
 	}
+	c.output.appendProgress("") // newline
 }

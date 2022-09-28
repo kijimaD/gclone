@@ -33,7 +33,7 @@ func (o *outputBuilder) writeProgress() {
 	for _, line := range o.progress.lines {
 		fmt.Println(string(line))
 	}
-	o.progress.lines = []string{""}
+	o.progress.lines = []string{}
 }
 
 func (o *outputBuilder) writeResult() {
