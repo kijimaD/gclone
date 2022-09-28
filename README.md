@@ -2,9 +2,31 @@
 
 # gclone
 
+<img src="https://user-images.githubusercontent.com/11595790/192002784-3a72243d-2343-42d2-a8e5-581977faa382.jpg" width="40%" align=right>
+
 gclone is literate `git clone` cli tool.
 
-<img src="https://user-images.githubusercontent.com/11595790/192002784-3a72243d-2343-42d2-a8e5-581977faa382.jpg" width="40%" align=right>
+```
+$ gclone
+────────────────────────
+Save dir: /root/Project1
+Repo count: 2
+────────────────────────
+⢿✔ git@github.com:fatih/color.git
+⡿✔ git@github.com:joho/godotenv.git
+
+────────────────────────
+Save dir: /root/Project2
+Repo count: 2
+────────────────────────
+⡿✔ git@github.com:kijimaD/my_go.git
+⣻✔ git@github.com:kijimaD/gin_hello.git
+
+done!
+Success: 4
+Fail: 0
+Process: 8760ms
+```
 
 # Install
 
@@ -18,11 +40,11 @@ make `config.yml`
 (↓example)
 ```yaml
 groups:
-  - dest: '~/Project/test0' # specify exist directory
+  - dest: '~/Project/test0'
     repos:
       - git@github.com:kijimaD/my_go.git
       - git@github.com:kijimaD/gin_hello.git
-  - dest: '~/Project/test1' # specify exist directory
+  - dest: '~/Project/test1'
     repos:
       - git@github.com:fatih/color.git
       - git@github.com:joho/godotenv.git
