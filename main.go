@@ -1,6 +1,8 @@
 package main
 
-import ()
+import (
+	"time"
+)
 
 const (
 	mainGitCommand    = "git"
@@ -19,9 +21,11 @@ type group struct {
 }
 
 func main() {
+	now := time.Now()
 	config, _ := LoadConfigForYaml()
-	var result result
-	output := newOutputBuilder(config, &result)
+	var result record
+	var progress record
+	output := newOutputBuilder(config, &result, &progress, now)
 
 	for _, group := range config.Groups {
 		command := newCommandBuilder(config, output, group)
@@ -29,7 +33,3 @@ func main() {
 	}
 	output.writeResult()
 }
-
-// 結果の構造体を作って、そこに結果を入れたい。そしてまとめた箇所で出力したい。今は出力がバラバラ
-// オプションと結果を保持する構造体・メソッドを作っていく
-// コマンドオプションと、ymlから読み取る設定をマージする

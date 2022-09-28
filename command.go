@@ -27,7 +27,7 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 
 func (c commandBuilder) execute() {
 	c.moveDir()
-	c.showInfo()
+	c.groupInfo()
 	c.executeCommand()
 }
 
@@ -39,17 +39,17 @@ func (c commandBuilder) moveDir() {
 	}
 }
 
-func (c commandBuilder) showInfo() {
-	path, _ := os.Getwd()
-	targetDir := fmt.Sprintf("Target dir: %v", path)
+func (c commandBuilder) groupInfo() {
+	currentPath, _ := os.Getwd()
+	targetDir := fmt.Sprintf("Target dir: %v", currentPath)
 	reposCount := fmt.Sprintf("Repo count: %v", len(c.group.Repos))
+	line := strings.Repeat("─", utf8.RuneCountInString(targetDir))
 
-	line := strings.Repeat("─", utf8.RuneCountInString(path))
-
-	fmt.Println(line)
-	fmt.Println(targetDir)
-	fmt.Println(reposCount)
-	fmt.Println(line)
+	c.output.appendProgress(line)
+	c.output.appendProgress(targetDir)
+	c.output.appendProgress(reposCount)
+	c.output.appendProgress(line)
+	c.output.writeProgress()
 }
 
 func (c commandBuilder) executeCommand() {
@@ -58,17 +58,17 @@ func (c commandBuilder) executeCommand() {
 	defer s.Stop()
 
 	for _, repo := range c.group.Repos {
-		_, err := exec.Command(mainGitCommand, buildCommand(repo)...).Output()
+		_, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).Output()
 		if err != nil {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
-			c.output.result.lines = append(c.output.result.lines, line)
+			c.output.appendProgress(line)
+			c.output.fail++
 		} else {
-			c.output.result.lines = append(c.output.result.lines, fmt.Sprintf("✔ %s", repo))
+			line := fmt.Sprintf("✔ %s", repo)
+			c.output.appendProgress(line)
+			c.output.success++
 		}
+		c.output.writeProgress()
 	}
-}
-
-func buildCommand(repo string) []string {
-	command := []string{subGitCommand, repo}
-	return command
+	c.output.appendProgress("") // newline
 }
