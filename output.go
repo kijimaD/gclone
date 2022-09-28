@@ -8,6 +8,8 @@ type outputBuilder struct {
 	config   *config
 	result   *record
 	progress *record
+	success  int
+	fail     int
 }
 
 type record struct {
@@ -19,6 +21,8 @@ func newOutputBuilder(config *config, result *record, progress *record) *outputB
 		config,
 		result,
 		progress,
+		0,
+		0,
 	}
 }
 
@@ -30,6 +34,9 @@ func (o *outputBuilder) writeProgress() {
 }
 
 func (o *outputBuilder) writeResult() {
+	fmt.Println("done")
+	fmt.Println("Success:", o.success)
+	fmt.Println("Fail:", o.fail)
 	for _, line := range o.result.lines {
 		fmt.Println(string(line))
 	}

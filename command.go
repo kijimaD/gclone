@@ -62,9 +62,11 @@ func (c commandBuilder) executeCommand() {
 		if err != nil {
 			line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
 			c.output.appendProgress(line)
+			c.output.fail++
 		} else {
 			line := fmt.Sprintf("✔ %s", repo)
 			c.output.appendProgress(line)
+			c.output.success++
 		}
 		c.output.writeProgress()
 	}
