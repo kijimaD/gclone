@@ -79,10 +79,10 @@ func (c commandBuilder) executeCommand(repo string) {
 	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
 	s.Start()
 	defer s.Stop()
+	stdout, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).CombinedOutput()
 
-	_, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).Output()
 	if err != nil {
-		line := fmt.Sprintf("❌ %s \n ↪ %s", repo, err.Error())
+		line := fmt.Sprintf("❌ %s \n ↪ %s \n ↪ %s", repo, err.Error(), stdout)
 		c.output.appendProgress(line)
 		c.output.fail++
 	} else {
