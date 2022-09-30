@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/briandowns/spinner"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -17,6 +16,7 @@ const (
 	defaultConfigPath = "config.yml"
 	homeDir           = "~/"
 	lineChar          = "─"
+	progressChar      = "."
 )
 
 type commandBuilder struct {
@@ -76,19 +76,43 @@ func (c commandBuilder) groupInfo() {
 }
 
 func (c commandBuilder) executeCommand(repo string) {
-	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
-	s.Start()
-	defer s.Stop()
-	stdout, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).CombinedOutput()
-
-	if err != nil {
-		line := fmt.Sprintf("❌ %s \n ↪ %s \n ↪ %s", repo, err.Error(), stdout)
-		c.output.appendProgress(line)
-		c.output.fail++
-	} else {
-		line := fmt.Sprintf("✔ %s", repo)
-		c.output.appendProgress(line)
-		c.output.success++
+	type output struct {
+		out []byte
+		err error
 	}
+
+	progressCount := 0
+	ch := make(chan output)
+	go func() {
+		out, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).CombinedOutput()
+		ch <- output{out, err}
+	}()
+
+	fmt.Print(fmt.Sprintf("%s", repo))
+progress:
+	for {
+		select {
+		case output := <-ch:
+			if output.err != nil {
+				line := fmt.Sprintf(" ❌ \n ↪ %s \n ↪ %s", string(output.err.Error()), string(output.out))
+				c.output.appendProgress(line)
+				c.output.fail++
+			} else {
+				line := fmt.Sprintf(" ✔")
+				c.output.appendProgress(line)
+				c.output.success++
+			}
+			progressCount = 0
+			break progress
+		default:
+			progressBar := strings.Repeat(progressChar, progressCount)
+			fmt.Print(fmt.Sprintf("%s", progressBar))
+			progressCount++
+
+			timer := time.NewTimer(1 * time.Second)
+			<-timer.C
+		}
+	}
+
 	c.output.writeProgress()
 }
