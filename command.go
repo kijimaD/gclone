@@ -81,6 +81,7 @@ func (c commandBuilder) executeCommand(repo string) {
 		err error
 	}
 
+	now := time.Now()
 	progressCount := 0
 	ch := make(chan output)
 	go func() {
@@ -98,19 +99,18 @@ progress:
 				c.output.appendProgress(line)
 				c.output.fail++
 			} else {
-				line := fmt.Sprintf(" ✔")
+				time := fmt.Sprintf("%ds", int(time.Since(now).Seconds()))
+				line := fmt.Sprintf(" ✔ (%s)", time)
 				c.output.appendProgress(line)
 				c.output.success++
 			}
 			progressCount = 0
 			break progress
 		default:
-			progressBar := strings.Repeat(progressChar, progressCount)
-			fmt.Print(fmt.Sprintf("%s", progressBar))
-			progressCount++
-
+			fmt.Print(progressChar)
 			timer := time.NewTimer(1 * time.Second)
 			<-timer.C
+			progressCount++
 		}
 	}
 
