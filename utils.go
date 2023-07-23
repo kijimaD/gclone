@@ -2,11 +2,13 @@ package main
 
 import (
 	"flag"
-	"github.com/go-yaml/yaml"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
+
+	"github.com/go-yaml/yaml"
 )
 
 func LoadConfigForYaml() (*config, error) {
@@ -32,4 +34,11 @@ func ExpandHomedir(original string) string {
 		expanded = filepath.Join(dirname, original[len(homeDir):])
 	}
 	return expanded
+}
+
+// git@github.com:fatih/color.git -> color
+func repoPathName(original string) string {
+	reg := regexp.MustCompile(`git@github.com:(.+?)/(.+?).git`)
+	result := reg.FindAllStringSubmatch(original, -1)
+	return result[0][2]
 }

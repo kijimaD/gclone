@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExpandHomeDir(t *testing.T) {
@@ -25,4 +27,10 @@ func TestExpandHomeDir(t *testing.T) {
 			t.Error("result: ", result, "expect:", expect)
 		}
 	}
+}
+
+func TestRepoPathName(t *testing.T) {
+	result := repoPathName("git@github.com:fatih/color.git")
+	expect := "color"
+	assert.Equal(t, expect, result)
 }
