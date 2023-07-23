@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -75,6 +76,8 @@ func (c commandBuilder) groupInfo() {
 	c.output.writeProgress()
 }
 
+// 実行中にプログレスバーを表示するために非同期実行にしている
+// FIXME: 汚いのでリファクタ
 func (c commandBuilder) executeCommand(repo string) {
 	type output struct {
 		out []byte
@@ -98,6 +101,23 @@ progress:
 				line := fmt.Sprintf(" ❌ \n ↪ %s \n ↪ %s", string(output.err.Error()), string(output.out))
 				c.output.appendProgress(line)
 				c.output.fail++
+
+				// pull
+				str := repoPathName(repo)
+
+				// ディレクトリが存在しない場合は処理を中断
+				_, err := os.Stat(str)
+				if err != nil {
+					panic(err)
+				}
+				c.moveDir()
+				currentPath, _ := os.Getwd()
+				dirErr := os.Chdir(path.Join(currentPath, str))
+				if dirErr != nil {
+					panic(dirErr)
+				}
+				out, _ := exec.Command(mainGitCommand, []string{"pull"}...).CombinedOutput()
+				c.output.appendProgress(string(out))
 			} else {
 				time := fmt.Sprintf("%ds", int(time.Since(now).Seconds()))
 				line := fmt.Sprintf(" ✔ (%s)", time)
