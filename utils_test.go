@@ -45,6 +45,11 @@ func TestRepoPathName(t *testing.T) {
 		},
 		{
 			name:   "3",
+			input:  "git@github.com:kd-collective/cask",
+			expect: "cask",
+		},
+		{
+			name:   "4",
 			input:  "https://github.com/kijimaD/gclone.git",
 			expect: "gclone",
 		},
