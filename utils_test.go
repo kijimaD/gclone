@@ -3,8 +3,6 @@ package main
 import (
 	"os"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestExpandHomeDir(t *testing.T) {
@@ -30,7 +28,34 @@ func TestExpandHomeDir(t *testing.T) {
 }
 
 func TestRepoPathName(t *testing.T) {
-	result := repoPathName("git@github.com:fatih/color.git")
-	expect := "color"
-	assert.Equal(t, expect, result)
+	tests := []struct {
+		name   string
+		input  string
+		expect string
+	}{
+		{
+			name:   "1",
+			input:  "git@github.com:fatih/color.git",
+			expect: "color",
+		},
+		{
+			name:   "2",
+			input:  "git@github.com:kijimaD/cloner",
+			expect: "cloner",
+		},
+		{
+			name:   "3",
+			input:  "https://github.com/kijimaD/gclone.git",
+			expect: "gclone",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := repoPathName(tt.input)
+			if got != tt.expect {
+				t.Errorf("got %s want %s", got, tt.expect)
+			}
+		})
+	}
 }

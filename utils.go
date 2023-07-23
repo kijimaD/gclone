@@ -38,7 +38,11 @@ func ExpandHomedir(original string) string {
 
 // git@github.com:fatih/color.git -> color
 func repoPathName(original string) string {
-	reg := regexp.MustCompile(`git@github.com:(.+?)/(.+?).git`)
-	result := reg.FindAllStringSubmatch(original, -1)
-	return result[0][2]
+	regMatch := regexp.MustCompile(`(https://|git@)github.com(:|/)(.+?)/(.+?)$`)
+	match := regMatch.FindAllStringSubmatch(original, -1)
+
+	regReplace := regexp.MustCompile(`.git`) // ついているときもあるので除去する
+	result := match[0][4]
+	result = regReplace.ReplaceAllString(result, "")
+	return result
 }
