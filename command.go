@@ -12,12 +12,12 @@ import (
 )
 
 const (
-	mainGitCommand    = "git"
-	subGitCommand     = "clone"
-	defaultConfigPath = "config.yml"
-	homeDir           = "~/"
-	lineChar          = "─"
-	progressChar      = "."
+	mainGitCommand     = "git"
+	subGitCommand      = "clone"
+	defaultConfigPath  = "config.yml"
+	homeDir            = "~/"
+	horizontalLineChar = "─"
+	progressChar       = "."
 )
 
 type commandBuilder struct {
@@ -34,10 +34,10 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 	}
 }
 
-func (c commandBuilder) executeGroup() {
+func (c commandBuilder) printGroup() {
 	c.prepareDir()
 	c.moveDir()
-	c.groupInfo()
+	c.writeGroupInfo()
 
 	for _, repo := range c.group.Repos {
 		c.executeCommand(repo)
@@ -63,11 +63,11 @@ func (c commandBuilder) moveDir() {
 	}
 }
 
-func (c commandBuilder) groupInfo() {
+func (c commandBuilder) writeGroupInfo() {
 	currentPath, _ := os.Getwd()
 	targetDir := fmt.Sprintf("Save dir: %v", currentPath)
 	reposCount := fmt.Sprintf("Repo count: %v", len(c.group.Repos))
-	line := strings.Repeat(lineChar, utf8.RuneCountInString(targetDir))
+	line := strings.Repeat(horizontalLineChar, utf8.RuneCountInString(targetDir))
 
 	c.output.appendProgress(line)
 	c.output.appendProgress(targetDir)
@@ -102,7 +102,7 @@ progress:
 				c.output.appendProgress(line)
 				c.output.fail++
 
-				// pull
+				// 失敗した場合にgit pullを実行する
 				str := repoPathName(repo)
 
 				// ディレクトリが存在しない場合は処理を中断

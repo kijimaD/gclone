@@ -22,7 +22,7 @@ func main() {
 
 	for _, group := range config.Groups {
 		command := newCommandBuilder(config, output, group)
-		command.executeGroup()
+		command.printGroup()
 	}
 	output.writeResult()
 }
