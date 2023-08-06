@@ -27,3 +27,23 @@ func TestPrintProgress(t *testing.T) {
 	expect = ""
 	assert.Equal(t, expect, actual)
 }
+
+func TestPrintResult(t *testing.T) {
+	config := config{}
+	o := NewOutputBuilder(&config)
+	o.result.lines = []string{"hello", "world"}
+
+	buf := bytes.Buffer{}
+	o.PrintResult(&buf)
+
+	actual := buf.String()
+	expect := `
+done!
+Success: 0
+Fail: 0
+Process: 0ms
+hello
+world
+`
+	assert.Equal(t, expect, actual)
+}

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	gclone "github.com/kijimaD/gclone/pkg"
 )
 
@@ -12,5 +14,5 @@ func main() {
 		command := gclone.NewCommandBuilder(config, output, group)
 		command.PrintGroup()
 	}
-	output.PrintResult()
+	output.PrintResult(os.Stdout)
 }

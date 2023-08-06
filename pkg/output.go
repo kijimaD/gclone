@@ -33,20 +33,21 @@ func NewOutputBuilder(config *config) *outputBuilder {
 	}
 }
 
-func (o *outputBuilder) printProgress(r io.Writer) {
+func (o *outputBuilder) printProgress(w io.Writer) {
 	for _, line := range o.progress.lines {
-		fmt.Fprintln(r, string(line))
+		fmt.Fprintln(w, string(line))
 	}
 	o.progress.lines = []string{}
 }
 
-func (o *outputBuilder) PrintResult() {
-	fmt.Printf("\ndone!\n")
-	fmt.Println("Success:", o.success)
-	fmt.Println("Fail:", o.fail)
-	fmt.Printf("Process: %vms\n", time.Since(o.now).Milliseconds())
+func (o *outputBuilder) PrintResult(w io.Writer) {
+	fmt.Fprintln(w, "")
+	fmt.Fprintln(w, "done!")
+	fmt.Fprintln(w, "Success:", o.success)
+	fmt.Fprintln(w, "Fail:", o.fail)
+	fmt.Fprintf(w, "Process: %vms\n", time.Since(o.now).Milliseconds())
 	for _, line := range o.result.lines {
-		fmt.Println(string(line))
+		fmt.Fprintln(w, string(line))
 	}
 }
 
