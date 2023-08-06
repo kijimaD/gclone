@@ -1,4 +1,4 @@
-package main
+package gclone
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ type commandBuilder struct {
 	group  group
 }
 
-func newCommandBuilder(config *config, output *outputBuilder, group group) *commandBuilder {
+func NewCommandBuilder(config *config, output *outputBuilder, group group) *commandBuilder {
 	return &commandBuilder{
 		config,
 		output,
@@ -34,7 +34,7 @@ func newCommandBuilder(config *config, output *outputBuilder, group group) *comm
 	}
 }
 
-func (c commandBuilder) printGroup() {
+func (c commandBuilder) PrintGroup() {
 	c.prepareDir()
 	c.moveDir()
 	c.writeGroupInfo()

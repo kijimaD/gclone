@@ -1,4 +1,4 @@
-package main
+package gclone
 
 import (
 	"fmt"
@@ -7,18 +7,18 @@ import (
 
 type outputBuilder struct {
 	config   *config
-	result   *record
-	progress *record
+	result   *Record
+	progress *Record
 	success  int
 	fail     int
 	now      time.Time
 }
 
-type record struct {
+type Record struct {
 	lines []string
 }
 
-func newOutputBuilder(config *config, result *record, progress *record, now time.Time) *outputBuilder {
+func NewOutputBuilder(config *config, result *Record, progress *Record, now time.Time) *outputBuilder {
 	return &outputBuilder{
 		config,
 		result,
@@ -36,7 +36,7 @@ func (o *outputBuilder) printProgress() {
 	o.progress.lines = []string{}
 }
 
-func (o *outputBuilder) printResult() {
+func (o *outputBuilder) PrintResult() {
 	fmt.Printf("\ndone!\n")
 	fmt.Println("Success:", o.success)
 	fmt.Println("Fail:", o.fail)

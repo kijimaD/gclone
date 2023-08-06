@@ -1,4 +1,4 @@
-package main
+package gclone
 
 import (
 	"flag"
@@ -36,7 +36,7 @@ func ExpandHomedir(original string) string {
 	return expanded
 }
 
-// git@github.com:fatih/color.git -> color
+// (example) "git@github.com:fatih/color.git" -> "color"
 func repoPathName(original string) string {
 	regMatch := regexp.MustCompile(`(https://|git@)github.com(:|/)(.+?)/(.+?)$`)
 	match := regMatch.FindAllStringSubmatch(original, -1)
