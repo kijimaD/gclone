@@ -73,7 +73,7 @@ func (c commandBuilder) writeGroupInfo() {
 	c.output.appendProgress(targetDir)
 	c.output.appendProgress(reposCount)
 	c.output.appendProgress(line)
-	c.output.writeProgress()
+	c.output.printProgress()
 }
 
 // 実行中にプログレスバーを表示するために非同期実行にしている
@@ -134,5 +134,5 @@ progress:
 		}
 	}
 
-	c.output.writeProgress()
+	c.output.printProgress()
 }

@@ -29,14 +29,14 @@ func newOutputBuilder(config *config, result *record, progress *record, now time
 	}
 }
 
-func (o *outputBuilder) writeProgress() {
+func (o *outputBuilder) printProgress() {
 	for _, line := range o.progress.lines {
 		fmt.Println(string(line))
 	}
 	o.progress.lines = []string{}
 }
 
-func (o *outputBuilder) writeResult() {
+func (o *outputBuilder) printResult() {
 	fmt.Printf("\ndone!\n")
 	fmt.Println("Success:", o.success)
 	fmt.Println("Fail:", o.fail)

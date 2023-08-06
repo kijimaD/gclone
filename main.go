@@ -24,5 +24,5 @@ func main() {
 		command := newCommandBuilder(config, output, group)
 		command.printGroup()
 	}
-	output.writeResult()
+	output.printResult()
 }
