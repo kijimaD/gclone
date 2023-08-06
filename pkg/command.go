@@ -91,7 +91,7 @@ func (c commandBuilder) executeCommand(repo string) {
 		ch <- output{out, err}
 	}()
 
-	fmt.Print(fmt.Sprintf("%s", repo))
+	fmt.Print(fmt.Sprintf("%s\n", repo))
 progress:
 	for {
 		select {
@@ -115,6 +115,7 @@ progress:
 				if dirErr != nil {
 					panic(dirErr)
 				}
+				// TODO: git pullもチャンネル化する
 				out, _ := exec.Command(mainGitCommand, []string{"pull"}...).CombinedOutput()
 				c.output.appendProgress(string(out))
 			} else {
@@ -123,9 +124,11 @@ progress:
 				c.output.appendProgress(line)
 				c.output.success++
 			}
+			c.output.flushFlash()
 			break progress
 		default:
-			fmt.Print(progressChar)
+			c.output.appendFlash(progressChar)
+			c.output.printFlash()
 			timer := time.NewTimer(1 * time.Second)
 			<-timer.C
 		}

@@ -3,6 +3,7 @@ package gclone
 import (
 	"fmt"
 	"io"
+	"strings"
 	"time"
 )
 
@@ -15,6 +16,7 @@ type outputBuilder struct {
 	fail     int
 	now      time.Time
 	writer   io.Writer
+	flash    string
 }
 
 type Record struct {
@@ -33,6 +35,7 @@ func NewOutputBuilder(config *config, w io.Writer) *outputBuilder {
 		0,
 		now,
 		w,
+		"",
 	}
 }
 
@@ -40,7 +43,15 @@ func (o *outputBuilder) printProgress() {
 	for _, line := range o.progress.lines {
 		fmt.Fprintln(o.writer, string(line))
 	}
-	o.progress.lines = []string{}
+	o.progress.lines = []string{} // flush
+}
+
+func (o *outputBuilder) printNewLine() {
+	fmt.Fprintln(o.writer, "")
+}
+
+func (o *outputBuilder) printFlash() {
+	fmt.Fprintf(o.writer, "%s\r", string(o.flash))
 }
 
 func (o *outputBuilder) PrintResult() {
@@ -60,6 +71,15 @@ func (o *outputBuilder) appendProgress(line string) {
 	o.progress.lines = append(o.progress.lines, line)
 }
 
+func (o *outputBuilder) appendFlash(str string) {
+	slice := []string{o.flash, str}
+	o.flash = strings.Join(slice, "")
+}
+
 func (o *outputBuilder) appendResult(line string) {
 	o.result.lines = append(o.result.lines, line)
+}
+
+func (o *outputBuilder) flushFlash() {
+	o.flash = ""
 }

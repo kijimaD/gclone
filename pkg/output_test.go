@@ -47,3 +47,14 @@ world
 `
 	assert.Equal(t, expect, actual)
 }
+
+func TestAppendInlineProgress(t *testing.T) {
+	config := config{}
+	buf := bytes.Buffer{}
+	o := NewOutputBuilder(&config, &buf)
+	o.appendFlash("hello")
+	o.appendFlash("world")
+
+	expect := "helloworld"
+	assert.Equal(t, expect, o.flash)
+}
