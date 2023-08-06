@@ -8,11 +8,11 @@ import (
 
 func main() {
 	config, _ := gclone.LoadConfigForYaml()
-	output := gclone.NewOutputBuilder(config)
+	output := gclone.NewOutputBuilder(config, os.Stdout)
 
 	for _, group := range config.Groups {
 		command := gclone.NewCommandBuilder(config, output, group)
-		command.PrintGroup()
+		command.ExecGroup()
 	}
-	output.PrintResult(os.Stdout)
+	output.PrintResult()
 }

@@ -2,6 +2,7 @@ package gclone
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -20,6 +21,7 @@ const (
 	progressChar       = "."
 )
 
+// 1つ1つのシェルコマンドを指す構造体
 type commandBuilder struct {
 	config *config
 	output *outputBuilder
@@ -34,7 +36,7 @@ func NewCommandBuilder(config *config, output *outputBuilder, group group) *comm
 	}
 }
 
-func (c commandBuilder) PrintGroup() {
+func (c commandBuilder) ExecGroup() {
 	c.prepareDir()
 	c.moveDir()
 	c.writeGroupInfo()
@@ -57,9 +59,7 @@ func (c commandBuilder) moveDir() {
 	dirErr := os.Chdir(absPath)
 	if dirErr != nil {
 		currentPath, _ := os.Getwd()
-		fmt.Println("current:", currentPath)
-		fmt.Println("want:", absPath)
-		panic(dirErr)
+		log.Fatalf("current: %s, want: %s", currentPath, absPath)
 	}
 }
 
@@ -73,7 +73,7 @@ func (c commandBuilder) writeGroupInfo() {
 	c.output.appendProgress(targetDir)
 	c.output.appendProgress(reposCount)
 	c.output.appendProgress(line)
-	c.output.printProgress(os.Stdout)
+	c.output.printProgress()
 }
 
 // 実行中にプログレスバーを表示するために非同期実行にしている
@@ -134,5 +134,5 @@ progress:
 		}
 	}
 
-	c.output.printProgress(os.Stdout)
+	c.output.printProgress()
 }

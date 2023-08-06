@@ -9,11 +9,11 @@ import (
 
 func TestPrintProgress(t *testing.T) {
 	config := config{}
-	o := NewOutputBuilder(&config)
+	buf := bytes.Buffer{}
+	o := NewOutputBuilder(&config, &buf)
 	o.progress.lines = []string{"hello", "world"}
 
-	buf := bytes.Buffer{}
-	o.printProgress(&buf)
+	o.printProgress()
 
 	actual := buf.String()
 	expect := "hello\nworld\n"
@@ -22,7 +22,7 @@ func TestPrintProgress(t *testing.T) {
 
 	// 1度表示すると、内部のprogressはリセットされる
 	bufafter := bytes.Buffer{}
-	o.printProgress(&bufafter)
+	o.printProgress()
 	actual = bufafter.String()
 	expect = ""
 	assert.Equal(t, expect, actual)
@@ -30,11 +30,11 @@ func TestPrintProgress(t *testing.T) {
 
 func TestPrintResult(t *testing.T) {
 	config := config{}
-	o := NewOutputBuilder(&config)
+	buf := bytes.Buffer{}
+	o := NewOutputBuilder(&config, &buf)
 	o.result.lines = []string{"hello", "world"}
 
-	buf := bytes.Buffer{}
-	o.PrintResult(&buf)
+	o.PrintResult()
 
 	actual := buf.String()
 	expect := `
