@@ -85,7 +85,6 @@ func (c commandBuilder) executeCommand(repo string) {
 	}
 
 	now := time.Now()
-	progressCount := 0
 	ch := make(chan output)
 	go func() {
 		out, err := exec.Command(mainGitCommand, []string{subGitCommand, repo}...).CombinedOutput()
@@ -124,13 +123,11 @@ progress:
 				c.output.appendProgress(line)
 				c.output.success++
 			}
-			progressCount = 0
 			break progress
 		default:
 			fmt.Print(progressChar)
 			timer := time.NewTimer(1 * time.Second)
 			<-timer.C
-			progressCount++
 		}
 	}
 
