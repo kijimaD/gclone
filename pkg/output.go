@@ -41,11 +41,13 @@ func (o *outputBuilder) printProgress(w io.Writer) {
 }
 
 func (o *outputBuilder) PrintResult(w io.Writer) {
-	fmt.Fprintln(w, "")
-	fmt.Fprintln(w, "done!")
-	fmt.Fprintln(w, "Success:", o.success)
-	fmt.Fprintln(w, "Fail:", o.fail)
-	fmt.Fprintf(w, "Process: %vms\n", time.Since(o.now).Milliseconds())
+	tmpl := `
+done!
+Success: %d
+Fail: %d
+Process: %vms
+`
+	fmt.Fprintf(w, tmpl, o.success, o.fail, time.Since(o.now).Milliseconds())
 	for _, line := range o.result.lines {
 		fmt.Fprintln(w, string(line))
 	}
