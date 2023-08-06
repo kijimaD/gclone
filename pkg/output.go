@@ -2,6 +2,7 @@ package gclone
 
 import (
 	"fmt"
+	"io"
 	"time"
 )
 
@@ -32,9 +33,9 @@ func NewOutputBuilder(config *config) *outputBuilder {
 	}
 }
 
-func (o *outputBuilder) printProgress() {
+func (o *outputBuilder) printProgress(r io.Writer) {
 	for _, line := range o.progress.lines {
-		fmt.Println(string(line))
+		fmt.Fprintln(r, string(line))
 	}
 	o.progress.lines = []string{}
 }
