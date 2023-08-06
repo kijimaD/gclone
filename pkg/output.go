@@ -7,8 +7,8 @@ import (
 
 type outputBuilder struct {
 	config   *config
-	result   *Record
-	progress *Record
+	result   *Record // 最後に1回だけ実行される類いの表示内容
+	progress *Record // 途中で何回か実行されそのたびに内容がリセットされる類の表示内容
 	success  int
 	fail     int
 	now      time.Time
@@ -18,11 +18,14 @@ type Record struct {
 	lines []string
 }
 
-func NewOutputBuilder(config *config, result *Record, progress *Record, now time.Time) *outputBuilder {
+func NewOutputBuilder(config *config) *outputBuilder {
+	record := Record{}
+	progress := Record{}
+	now := time.Now()
 	return &outputBuilder{
 		config,
-		result,
-		progress,
+		&record,
+		&progress,
 		0,
 		0,
 		now,
