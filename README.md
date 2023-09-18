@@ -36,8 +36,8 @@ $ go install github.com/kijimaD/gclone@main
 
 # How to use
 
-make `config.yml`
-(↓example)
+`gclone.yml` example
+
 ```yaml
 groups:
   - dest: '~/Project/test0'
@@ -50,7 +50,7 @@ groups:
       - git@github.com:joho/godotenv.git
 ```
 
-and run!(on directory config.yml existing)
+and run!(gclone.yml exist on current directory )
 ```shell
 $ gclone
 ```
@@ -59,7 +59,7 @@ $ gclone
 
 -f: config file path
 ```shell
-$ gclone -f dir/config.yml
+$ gclone -f dir/gclone.yml
 ```
 
 # Docker

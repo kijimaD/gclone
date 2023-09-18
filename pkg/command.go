@@ -15,7 +15,7 @@ import (
 const (
 	mainGitCommand     = "git"
 	subGitCommand      = "clone"
-	defaultConfigPath  = "config.yml"
+	defaultConfigPath  = "gclone.yml"
 	homeDir            = "~/"
 	horizontalLineChar = "─"
 	progressChar       = "."
